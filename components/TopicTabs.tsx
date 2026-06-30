@@ -243,7 +243,7 @@ export function TopicTabs({ topic }: TopicTabsProps) {
       <div
         role="tablist"
         aria-label="Topic sections"
-        className="flex gap-0 border-b border-[var(--color-border)]"
+        className="flex gap-0 overflow-x-auto border-b border-[var(--color-border)]"
       >
         {TABS.map((tab, index) => {
           const isActive = activeTab === tab.id;

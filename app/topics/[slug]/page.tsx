@@ -18,6 +18,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: topic.title,
     description: topic.summary,
+    openGraph: {
+      title: `${topic.title} | QA Learning Hub`,
+      description: topic.summary,
+      type: "article",
+      url: `https://qa-learning-hub.vercel.app/topics/${slug}`,
+      images: [
+        {
+          url: `/topics/${slug}/opengraph-image.png`,
+          width: 1200,
+          height: 630,
+          alt: topic.title,
+        },
+      ],
+    },
   };
 }
 

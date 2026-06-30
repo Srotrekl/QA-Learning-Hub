@@ -53,14 +53,14 @@ export default function RootLayout({
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
             <a
               href="/"
-              className="font-mono text-sm font-semibold text-[var(--color-text-primary)] transition-colors hover:text-[var(--color-accent)]"
+              className="font-mono text-sm font-semibold text-[var(--color-text-primary)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] rounded-sm"
             >
               <span className="text-[var(--color-accent)]">&#9654;</span> qa-hub
             </a>
             <nav className="flex items-center gap-4">
               <a
                 href="/about"
-                className="text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+                className="text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] rounded-sm"
               >
                 About
               </a>
@@ -68,7 +68,7 @@ export default function RootLayout({
                 href="https://github.com/Srotrekl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+                className="text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] rounded-sm"
               >
                 GitHub
               </a>

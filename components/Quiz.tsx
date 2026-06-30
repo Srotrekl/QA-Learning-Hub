@@ -135,7 +135,12 @@ export function Quiz({ questions }: QuizProps) {
       </p>
 
       {/* Options */}
-      <div className="flex flex-col gap-2" role="group" aria-label="Answer options">
+      <div
+        role="radiogroup"
+        aria-label="Answer options"
+        aria-describedby={answered ? explanationId : undefined}
+        className="flex flex-col gap-2"
+      >
         {q.options.map((option, i) => {
           const isSelected = selectedIndex === i;
           const isCorrect = i === q.correctIndex;
@@ -158,10 +163,10 @@ export function Quiz({ questions }: QuizProps) {
           return (
             <button
               key={i}
+              role="radio"
+              aria-checked={isSelected}
               onClick={() => selectOption(i)}
               disabled={answered}
-              aria-pressed={isSelected}
-              aria-describedby={answered ? explanationId : undefined}
               className={`flex items-start gap-3 rounded-md border px-4 py-3 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] disabled:cursor-default ${stateClasses}`}
             >
               <span className="font-mono text-xs opacity-60 shrink-0 pt-0.5">{i + 1}</span>

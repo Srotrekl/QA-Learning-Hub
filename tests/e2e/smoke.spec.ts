@@ -70,13 +70,13 @@ test.describe("QA Hub smoke", () => {
 
     // Answer all 5 questions (always pick first option, then Next)
     for (let i = 0; i < 5; i++) {
-      const options = page.getByRole("group", { name: "Answer options" }).getByRole("button");
+      const options = page.getByRole("radiogroup", { name: "Answer options" }).getByRole("radio");
       await options.first().click();
       const isLast = i === 4;
       if (isLast) {
         await page.getByRole("button", { name: /see results/i }).click();
       } else {
-        await page.getByRole("button", { name: /next/i }).click();
+        await page.getByRole("button", { name: /^next/i }).click();
       }
     }
 
@@ -91,12 +91,12 @@ test.describe("QA Hub smoke", () => {
 
     // Complete quiz
     for (let i = 0; i < 5; i++) {
-      const options = page.getByRole("group", { name: "Answer options" }).getByRole("button");
+      const options = page.getByRole("radiogroup", { name: "Answer options" }).getByRole("radio");
       await options.first().click();
       if (i === 4) {
         await page.getByRole("button", { name: /see results/i }).click();
       } else {
-        await page.getByRole("button", { name: /next/i }).click();
+        await page.getByRole("button", { name: /^next/i }).click();
       }
     }
 
@@ -133,4 +133,35 @@ test.describe("QA Hub smoke", () => {
       .analyze();
     expect(results.violations).toEqual([]);
   });
+});
+
+const ALL_TOPIC_SLUGS = [
+  "playwright",
+  "api-testing",
+  "pytest-basics",
+  "ci-cd",
+  "ai-llm-security",
+];
+
+test.describe("A11y — all topic pages", () => {
+  for (const slug of ALL_TOPIC_SLUGS) {
+    test(`/topics/${slug} has no critical a11y violations`, async ({ page }) => {
+      await page.goto(`/topics/${slug}`);
+      const results = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+
+      if (results.violations.length > 0) {
+        const summary = results.violations.map((v) => ({
+          id: v.id,
+          impact: v.impact,
+          description: v.description,
+          nodes: v.nodes.length,
+        }));
+        console.error(`A11y violations on /topics/${slug}:`, JSON.stringify(summary, null, 2));
+      }
+
+      expect(results.violations).toEqual([]);
+    });
+  }
 });
