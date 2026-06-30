@@ -10,6 +10,7 @@ const topicModules = {
   "ai-llm-security": () => import("@/content/topics/ai-llm-security"),
   "pytest-basics": () => import("@/content/topics/pytest-basics"),
   "ci-cd": () => import("@/content/topics/ci-cd"),
+  "test-design": () => import("@/content/topics/test-design"),
 } as const;
 
 export type TopicSlug = keyof typeof topicModules;
