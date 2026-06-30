@@ -347,6 +347,152 @@ jobs:
   ],
 
   relatedRepoUrl: "https://github.com/Srotrekl/qa-automation-showcase",
+
+  cs: {
+    summary:
+      "Automatizace testování s GitHub Actions: struktura workflow, triggery, matrix buildy, artefakty a test gates na PR.",
+    explanation: `## CI/CD pro QA s GitHub Actions
+
+Continuous Integration znamená, že každá změna kódu je automaticky otestována před mergem. Pro QA engineera je CI rozdíl mezi testy, kterým tým věří, a testy, které běží jen občas na lokálu.
+
+### Struktura workflow
+
+GitHub Actions workflow je YAML soubor v \`.github/workflows/\`. Každý workflow má tři vrstvy:
+
+\`\`\`
+on:      ← kdy spustit (trigger)
+jobs:    ← co spustit (parallelní nebo sekvenční jednotky)
+  steps: ← jednotlivé příkazy v rámci jobu
+\`\`\`
+
+**Triggery (\`on:\`)** — řídí, kdy workflow spustit:
+
+| Trigger | Kdy se spustí |
+|---------|-------------|
+| \`push\` | Při každém commitu na danou větev |
+| \`pull_request\` | Při otevření, aktualizaci nebo synchronizaci PR |
+| \`schedule\` | Cron schéma (např. noční regresní běh) |
+| \`workflow_dispatch\` | Manuální spuštění z GitHub UI |
+
+### Pořadí jobů: lint → test → build
+
+Joby běží paralelně. \`needs:\` vynutí pořadí a vytvoří pipeline s quality gates:
+
+\`\`\`yaml
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install ruff && ruff check .
+
+  test:
+    needs: lint          # spustí se jen pokud lint projde
+    steps:
+      - run: pytest
+
+  build:
+    needs: test          # spustí se jen pokud test projde
+    steps:
+      - run: docker build .
+\`\`\`
+
+### Matrix buildy
+
+Spuštění stejného jobu pro více konfigurací najednou:
+
+\`\`\`yaml
+strategy:
+  matrix:
+    python-version: ["3.11", "3.12"]
+    os: [ubuntu-latest, windows-latest]
+\`\`\`
+
+Vytvoří 4 parallelní joby (2 Python verze × 2 OS). \`fail-fast: false\` zobrazí výsledky pro všechny kombinace.
+
+### Cache závislostí
+
+Cache zkrátí instalaci z 60–90 sekund na méně než 5 sekund na cache hit:
+
+\`\`\`yaml
+- uses: actions/setup-python@v5
+  with:
+    python-version: "3.12"
+    cache: "pip"
+\`\`\`
+
+### Artefakty — reporty a screenshoty
+
+\`if: always()\` pro reporty (chceš je při úspěchu i selhání), \`if: failure()\` pro screenshoty (jen při problémech).
+
+### Test gates — blokování PR při selhání
+
+Neúspěšný CI job může zablokovat merge PR přes **branch protection rules**. Testovací suite se stane smlouvou, ne doporučením.
+`,
+    whyItMatters:
+      "QA engineer, který umí spustit testy pouze lokálně, je o polovinu méně efektivní než ten, kdo je napojí do CI. Když testy běží automaticky na každém PR, celý tým profituje. GitHub Actions je dnes nejrozšířenější CI platforma — znát ho je klíčová dovednost.",
+    quiz: [
+      {
+        question: "Chceš spustit workflow na každém PR na main a každou noc ve 02:00 UTC. Která konfigurace triggeru je správná?",
+        options: [
+          "on: push: branches: [main]",
+          "on:\n  pull_request:\n    branches: [main]\n  schedule:\n    - cron: \"0 2 * * *\"",
+          "on: pull_request and schedule: nightly",
+          "on: [pr, nightly]",
+        ],
+        correctIndex: 1,
+        explanation:
+          "GitHub Actions podporuje více triggerů pod jedním 'on:' klíčem. pull_request se spustí při PR eventech; schedule používá standardní 5-polní cron syntaxi. Oba mohou koexistovat v jednom workflow.",
+      },
+      {
+        question: "Co dělá 'fail-fast: false' v matrix build strategii?",
+        options: [
+          "Workflow selže okamžitě při první chybě ve všech jobech",
+          "Zakáže cache pro čisté prostředí každého matrix jobu",
+          "Nechá všechny kombinace doběhnout do konce i při selhání jedné — vidíš výsledky pro každou kombinaci",
+          "Automaticky opakuje každý neúspěšný matrix job až 3×",
+        ],
+        correctIndex: 2,
+        explanation:
+          "Výchozí chování (fail-fast: true) zruší zbývající matrix joby při prvním selhání. fail-fast: false nechá každou kombinaci doběhnout — užitečné, když chceš vědět, které Python verze nebo OS kombinace jsou rozbité.",
+      },
+      {
+        question: "Kdy použít 'if: always()' vs 'if: failure()' pro upload artefaktů?",
+        options: [
+          "always() pro screenshoty (jen při selhání); failure() pro HTML reporty (vždy potřeba)",
+          "always() pro kompletní test reporty (užitečné při úspěchu i selhání); failure() pro screenshoty (jen při problémech)",
+          "Jsou zaměnitelné — oba uploadují artefakt bez ohledu na stav jobu",
+          "always() běží před testovacím krokem; failure() po něm",
+        ],
+        correctIndex: 1,
+        explanation:
+          "HTML test reporty jsou cenné při selhání (diagnostika) i při úspěchu (sledování trendů). Playwright screenshoty jsou smysluplné jen při selhání — upload při každém úspěšném běhu plýtvá místem. always() pro reporty, failure() pro důkazy selhání.",
+      },
+      {
+        question: "V pipeline s 'needs: lint' na test jobu a 'needs: test' na build jobu — co se stane při selhání lint jobu?",
+        options: [
+          "Test job poběží; jen build job bude přeskočen",
+          "Všechny navazující joby (test i build) budou přeskočeny a workflow selže bez spuštění testů nebo buildu",
+          "GitHub Actions automaticky zopakuje lint job před přeskočením navazujících jobů",
+          "Build job běží paralelně s lint, takže není ovlivněn",
+        ],
+        correctIndex: 1,
+        explanation:
+          "'needs:' vytváří řetěz závislostí. Pokud lint selže, test job je přeskočen. Build je přeskočen také, protože jeho závislost (test) byla přeskočena. Pipeline selže rychle — žádné runner minuty se neplýtvají na testy při rozbité lint kontrole.",
+      },
+      {
+        question: "Jaký je QA přínos cache pip nebo npm závislostí v CI?",
+        options: [
+          "Cache zrychlí testy přeskočením nestabilních assertions",
+          "Cache zajistí použití stejných verzí balíčků při každém běhu",
+          "Cache zkrátí dobu instalace z minut na sekundy na cache hit a udrží feedback loop krátký bez změny chování testů",
+          "Cache je povinná pro matrix buildy — bez ní nemohou matrix joby sdílet stav",
+        ],
+        correctIndex: 2,
+        explanation:
+          "Bez cache každý CI job reinstaluje všechny balíčky ze sítě — obvykle 60–90 sekund pro typický Python nebo Node projekt. Cache hit to zkrátí na méně než 5 sekund. Rychlejší CI = vývojáři dostanou zpětnou vazbu dříve a méně vynechávají čekání na výsledky.",
+      },
+    ],
+  },
 };
 
 export default topic;

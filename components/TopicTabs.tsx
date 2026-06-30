@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Topic } from "@/lib/types";
 import { Quiz } from "@/components/Quiz";
 import { CodeRunner } from "@/components/CodeRunner";
-import { useT } from "@/lib/i18n";
+import { useT, useTopicLang } from "@/lib/i18n";
 
 interface TopicTabsProps {
   topic: Topic;
@@ -113,9 +113,14 @@ function CopyButton({ text }: { text: string }) {
 // ─── Tab panels ───────────────────────────────────────────────────────────────
 function ExplanationPanel({ topic }: { topic: Topic }) {
   const t = useT();
+  const lang = useTopicLang();
+  const cs = lang === "cs" ? topic.cs : undefined;
+  const explanation = cs?.explanation ?? topic.explanation;
+  const whyItMatters = cs?.whyItMatters ?? topic.whyItMatters;
+
   return (
     <div className="flex flex-col gap-6">
-      <SimpleMarkdown content={topic.explanation} />
+      <SimpleMarkdown content={explanation} />
 
       {/* Why it matters box */}
       <div className="rounded-md border border-[var(--color-accent)]/30 bg-[var(--color-accent-dim)] p-4">
@@ -123,7 +128,7 @@ function ExplanationPanel({ topic }: { topic: Topic }) {
           {t.whyItMatters}
         </p>
         <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-          {topic.whyItMatters}
+          {whyItMatters}
         </p>
       </div>
 
@@ -202,11 +207,14 @@ function TryPanel({ topic }: { topic: Topic }) {
 
 function QuizPanel({ topic }: { topic: Topic }) {
   const t = useT();
-  if (topic.quiz.length === 0) {
+  const lang = useTopicLang();
+  const questions = (lang === "cs" && topic.cs?.quiz) ? topic.cs.quiz : topic.quiz;
+
+  if (questions.length === 0) {
     return <p className="text-sm text-[var(--color-text-muted)]">{t.quiz.noQuiz}</p>;
   }
 
-  return <Quiz questions={topic.quiz} />;
+  return <Quiz questions={questions} />;
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────

@@ -41,3 +41,8 @@ export function useT() {
   const { lang } = useLanguage();
   return messages[lang];
 }
+
+export function useTopicLang() {
+  const { lang } = useLanguage();
+  return lang;
+}

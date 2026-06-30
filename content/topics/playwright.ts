@@ -148,6 +148,93 @@ console.log("\\nKey insight: Playwright getByRole only matches VISIBLE elements 
     },
   ],
   relatedRepoUrl: "https://github.com/Srotrekl/qa-automation-showcase",
+
+  cs: {
+    summary:
+      "End-to-end testování s Playwrightem: selektory, auto-wait, fixtures a vzor Page Object Model.",
+    explanation: `## Playwright E2E Testing
+
+Playwright je moderní framework pro end-to-end testování od Microsoftu. Podporuje Chromium, Firefox a WebKit.
+
+### Klíčové koncepty
+
+**Selektory** — Playwright doporučuje sémantické selektory orientované na uživatele:
+- \`getByRole('button', { name: 'Submit' })\` — ARIA role
+- \`getByText('Welcome')\` — viditelný text
+- \`getByTestId('login-form')\` — atribut data-testid
+
+**Auto-wait** — Playwright automaticky čeká, až je prvek viditelný, stabilní a připravený k interakci. Žádné \`sleep()\` ani ruční čekání.
+
+**Fixtures** — znovupoužitelný setup/teardown přes \`test.extend()\`. Sdílení browser contextu, stavu přihlášení nebo vlastních page objektů napříč testy.
+
+**Page Object Model (POM)** — zabalení interakcí se stránkou do třídy pro čitelné a udržovatelné testy.
+`,
+    whyItMatters:
+      "Playwright je průmyslový standard pro E2E testování moderních webových projektů. Umět psát udržovatelné Playwright testy — se správnými selektory, fixtures a POM — je základní dovednost, kterou hiring manageři u QA engineerů hledají.",
+    quiz: [
+      {
+        question: "Co dělá mechanismus auto-wait v Playwright?",
+        options: [
+          "Přidá pevné zpoždění 1 sekundu před každou akcí",
+          "Čeká, až je prvek viditelný, stabilní a připravený k interakci",
+          "Opakuje neúspěšné assertions až 3×",
+          "Automaticky pořizuje screenshot při selhání",
+        ],
+        correctIndex: 1,
+        explanation:
+          "Auto-wait v Playwright zvyšuje spolehlivost testů tím, že automaticky čeká, až prvek dosáhne akčního stavu — je viditelný, povolený a nedochází k animaci. Odpadají ruční volání sleep().",
+      },
+      {
+        question: "Který selektor Playwright doporučuje jako nejlepší z hlediska přístupnosti a odolnosti?",
+        options: [
+          "CSS class selektor (.btn-primary)",
+          "XPath (//div[@class='form'])",
+          "Selektor podle role (getByRole('button', { name: 'Submit' }))",
+          "Selektor podle pořadí (nth-child(3))",
+        ],
+        correctIndex: 2,
+        explanation:
+          "Selektory podle role odrážejí to, jak s prvky interagují uživatelé a asistivní technologie. Jsou odolné vůči změnám stylů a reflektují vlastnosti přístupnosti — pokud test projde, prvek je také přístupný.",
+      },
+      {
+        question: "K čemu slouží vzor Page Object Model (POM)?",
+        options: [
+          "Automatické generování testovacích dat",
+          "Spouštění testů paralelně napříč prohlížeči",
+          "Zabalení interakcí se stránkou do znovupoužitelných tříd",
+          "Mockování API odpovědí v testech",
+        ],
+        correctIndex: 2,
+        explanation:
+          "POM obaluje interakce se stránkou (selektory, kliknutí, vyplňování) do třídy. Testy volají metody jako loginPage.fillCredentials() místo duplikování selektorů. Při změně UI stačí upravit jedno místo.",
+      },
+      {
+        question: "Jak sdílet stav přihlášeného prohlížeče napříč Playwright testy?",
+        options: [
+          "Přihlásit se v každém testu zvlášť",
+          "Použít fixtures přes test.extend() se storageState",
+          "Nastavit globální cookie v beforeAll",
+          "Volat page.evaluate() pro nastavení localStorage",
+        ],
+        correctIndex: 1,
+        explanation:
+          "Playwright fixtures se storageState umožňují uložit stav přihlášení jednou (např. v global setup) a znovu ho použít ve všech testech. Odpadají přihlašovací kroky a testy se soustředí na testovanou funkcionalitu.",
+      },
+      {
+        question:
+          "Jaký je rozdíl mezi expect(locator).toBeVisible() a expect(locator).toBeAttached()?",
+        options: [
+          "Žádný rozdíl — jsou to aliasy",
+          "toBeVisible kontroluje CSS viditelnost; toBeAttached jen přítomnost v DOM",
+          "toBeAttached kontroluje CSS viditelnost; toBeVisible jen přítomnost v DOM",
+          "Obě assertions selžou, když je prvek mimo viewport",
+        ],
+        correctIndex: 1,
+        explanation:
+          "toBeAttached jen potvrzuje přítomnost prvku v DOM. toBeVisible navíc vyžaduje, aby byl prvek viditelný (není skrytý přes CSS, má nenulové rozměry). Skrytý input je attached, ale není visible — toBeVisible by na něm selhalo.",
+      },
+    ],
+  },
 };
 
 export default topic;

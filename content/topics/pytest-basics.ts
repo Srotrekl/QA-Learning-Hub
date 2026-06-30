@@ -124,6 +124,124 @@ def test_is_adult(age, expected):
     },
   ],
   relatedRepoUrl: "https://github.com/Srotrekl/qa-automation-showcase",
+
+  cs: {
+    summary:
+      "Základy pytestem: fixtures, parametrize, markery a struktura testovacích projektů.",
+    explanation: `## Pytest Basics
+
+pytest je nejrozšířenější testovací framework pro Python. Nabízí automatické discovery testů, fixtures a výkonné pluginy.
+
+### Fixtures
+
+Fixtures poskytují setup a teardown dat nebo prostředí, které testy potřebují:
+
+\`\`\`python
+@pytest.fixture
+def db_connection():
+    conn = create_connection()
+    yield conn
+    conn.close()   # teardown po testu
+\`\`\`
+
+**Scope fixtures**: \`function\` (výchozí), \`class\`, \`module\`, \`session\` — ovlivňuje, jak často se fixture inicializuje.
+
+### Parametrize
+
+Spustí stejný test s různými vstupními hodnotami:
+
+\`\`\`python
+@pytest.mark.parametrize("email,valid", [
+    ("user@example.com", True),
+    ("not-an-email", False),
+    ("", False),
+])
+def test_email_validation(email, valid):
+    assert validate_email(email) == valid
+\`\`\`
+
+### Markery
+
+Označování a filtrování testů:
+- \`@pytest.mark.slow\` — přeskočit v rychlých bězích
+- \`@pytest.mark.smoke\` — jen kritická cesta
+- \`@pytest.mark.skip\` / \`@pytest.mark.xfail\` — known issues
+
+### Struktura projektu
+
+\`\`\`
+tests/
+  conftest.py       ← sdílené fixtures
+  test_auth.py
+  test_api.py
+pytest.ini          ← konfigurace, vlastní markery
+\`\`\`
+`,
+    whyItMatters:
+      "pytest je průmyslový standard pro Python QA projekty. Ovládnutí fixtures, parametrize a markerů je základ pro API testování, integrační testy a CI pipeline — dovednosti hledané v každém QA inzerátu pro Python projekty.",
+    quiz: [
+      {
+        question: "Co je pytest fixture?",
+        options: [
+          "Formát pro assertion zprávy",
+          "Znovupoužitelná funkce pro setup/teardown dat nebo prostředí před/po testu",
+          "Plugin pro generování HTML reportů",
+          "Dekorátor pro přeskočení pomalých testů",
+        ],
+        correctIndex: 1,
+        explanation:
+          "Fixture je funkce dekorovaná @pytest.fixture, která poskytuje data nebo prostředí testu. yield umožňuje teardown po dokončení testu — pytest garantuje spuštění teardown i při selhání.",
+      },
+      {
+        question: "Jaký je scope 'session' u pytest fixtures?",
+        options: [
+          "Fixture se inicializuje před každou testovací funkcí",
+          "Fixture se inicializuje jednou za celé testovací sezení pro všechny testy",
+          "Fixture je sdílena v rámci jedné testovací třídy",
+          "Fixture se inicializuje jednou za každý testovací modul",
+        ],
+        correctIndex: 1,
+        explanation:
+          "scope='session' znamená, že fixture se vytvoří jednou a sdílí se napříč celým testovacím sezením. Ideální pro drahé operace jako připojení k databázi nebo auth token — vytvoří se jednou, teardown proběhne na konci.",
+      },
+      {
+        question: "K čemu slouží soubor conftest.py?",
+        options: [
+          "Konfigurace pytest reportů a výstupu",
+          "Sdílené fixtures a helpery dostupné všem testům v adresáři bez importu",
+          "Definice vlastních assertion zpráv",
+          "Nastavení timeoutů a retry logiky",
+        ],
+        correctIndex: 1,
+        explanation:
+          "conftest.py je speciální soubor, který pytest automaticky načte. Fixtures definované zde jsou dostupné všem testům v adresáři a podadresářích bez nutnosti explicitního importu. Jeden conftest.py v root projektu pokryje celou test suite.",
+      },
+      {
+        question: "Jak @pytest.mark.parametrize zkracuje testovací kód?",
+        options: [
+          "Sloučí více assertion do jednoho testu",
+          "Spustí jednu testovací funkci s různými vstupními kombinacemi místo duplikování testu",
+          "Automaticky vygeneruje hraniční hodnoty",
+          "Umožní sdílet testovací data mezi soubory",
+        ],
+        correctIndex: 1,
+        explanation:
+          "parametrize eliminuje copy-paste. Místo 5 téměř identických testovacích funkcí napíšeš jednu s @pytest.mark.parametrize a seznam vstupů. pytest spustí funkci pro každou kombinaci a pojmenuje každý případ pro přehledné reporty.",
+      },
+      {
+        question: "Co dělá @pytest.mark.xfail?",
+        options: [
+          "Přeskočí test a nezapočítá ho do výsledků",
+          "Označí test jako očekávaně selhávající — pokud selže, pytest ho reportuje jako xfail (ne failure)",
+          "Označí test jako kritický — přeruší suite při selhání",
+          "Spustí test paralelně s ostatními",
+        ],
+        correctIndex: 1,
+        explanation:
+          "xfail označuje test pro known bug nebo chování, které ještě není implementováno. Pokud test selže, pytest ho označí jako xfail (expected failure) a neselhá suite. Pokud by test prošel (XPASS), může to signalizovat, že bug byl opraven a marker lze odstranit.",
+      },
+    ],
+  },
 };
 
 export default topic;

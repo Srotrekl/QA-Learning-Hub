@@ -402,6 +402,101 @@ def test_delete_booking_without_auth_returns_403(created_booking_id: int):
   ],
 
   relatedRepoUrl: "https://github.com/Srotrekl/qa-automation-showcase",
+
+  cs: {
+    summary:
+      "API testování s pytestem a requests: HTTP metody, JSON schema validace, autentizace, pozitivní a negativní testy.",
+    explanation: `## API Testing (pytest + requests)
+
+API testování ověřuje HTTP rozhraní přímo — bez prohlížeče. Každý endpoint má definované vstupy, výstupy a chování při chybách.
+
+### Klíčové HTTP koncepty
+
+Každá API odpověď obsahuje **status kód**, **hlavičky** a **tělo (JSON)**:
+
+| Rozsah | Kategorie |
+|--------|-----------|
+| 2xx | Úspěch (200 OK, 201 Created, 204 No Content) |
+| 4xx | Chyba klienta (400 Bad Request, 401 Unauthorized, 404 Not Found) |
+| 5xx | Chyba serveru (500 Internal Server Error) |
+
+### Pozitivní a negativní testy
+
+**Pozitivní test** — ověří, že správný vstup vrátí očekávaný výstup.
+**Negativní test** — ověří, že neplatný vstup vrátí chybu (ne 500, ne 200 s prázdnými daty).
+
+### JSON Schema validace
+
+Validace struktury odpovědi — ne jen status kódu:
+- Správné datové typy (string, number, boolean)
+- Povinná pole přítomna
+- Hodnoty v povoleném rozsahu
+
+### Fixtures a parametrize
+
+**Fixtures** — znovupoužitelný setup (base URL, přihlašovací token, testovací data).
+**parametrize** — spuštění stejného testu s různými vstupními hodnotami bez duplikování kódu.
+`,
+    whyItMatters:
+      "API testing je základ moderního QA — je rychlejší než E2E testy, méně křehký a pokrývá business logiku přímo. Ovládat pytest + requests a JSON schema validaci je klíčová dovednost pro API a backend role.",
+    quiz: [
+      {
+        question: "Jaký HTTP status kód vrací API při úspěšném vytvoření nového zdroje (POST)?",
+        options: ["200 OK", "201 Created", "204 No Content", "202 Accepted"],
+        correctIndex: 1,
+        explanation:
+          "201 Created signalizuje úspěšné vytvoření. 200 OK je pro úspěšné GET nebo PUT (aktualizace). 204 No Content je pro DELETE nebo operace bez těla odpovědi.",
+      },
+      {
+        question: "Proč testovat negativní scénáře v API testech?",
+        options: [
+          "Negativní testy ověřují, že API vrátí 200 i pro neplatné vstupy",
+          "Ověřují, že API správně odmítne neplatné vstupy a vrátí správné chybové kódy místo pádu serveru",
+          "Negativní testy jsou pouze pro bezpečnostní testování",
+          "Slouží k měření výkonu endpointů",
+        ],
+        correctIndex: 1,
+        explanation:
+          "API musí správně zpracovat neplatné vstupy — vrátit 400 nebo 422 místo 500. Pokud API při neplatném vstupu vrátí 500, jde o bezpečnostní riziko a chybu v error handlingu.",
+      },
+      {
+        question: "Co validuje JSON Schema validace navíc oproti pouhé kontrole status kódu?",
+        options: [
+          "Rychlost odpovědi API",
+          "Strukturu a datové typy těla odpovědi (pole, typy, formáty)",
+          "Správnost HTTP hlaviček",
+          "Autentizaci a autorizaci",
+        ],
+        correctIndex: 1,
+        explanation:
+          "Status kód 200 říká jen, že request uspěl — ale tělo může mít chybějící pole nebo špatné typy. JSON Schema validace zachytí tyto strukturální problémy dříve, než se projeví v UI nebo downstream systémech.",
+      },
+      {
+        question: "Jak slouží pytest fixtures v API testech?",
+        options: [
+          "Generují náhodná testovací data",
+          "Poskytují znovupoužitelný setup (base URL, auth token, testovací data) sdílený napříč testy",
+          "Mockují HTTP odpovědi bez skutečného volání API",
+          "Spouštějí testy paralelně",
+        ],
+        correctIndex: 1,
+        explanation:
+          "Fixtures v pytestem definují znovupoužitelný setup a teardown. Například fixture 'auth_token' se přihlásí jednou a vrátí token — test pak dostane token automaticky bez opakování login logiky.",
+      },
+      {
+        question: "K čemu slouží @pytest.mark.parametrize v API testech?",
+        options: [
+          "Označení pomalých testů pro přeskočení v CI",
+          "Spuštění stejného testu s různými vstupními hodnotami bez duplikování kódu",
+          "Paralelní spuštění testů na více vláknech",
+          "Označení expectedFailure testů",
+        ],
+        correctIndex: 1,
+        explanation:
+          "parametrize eliminuje copy-paste testů. Jeden test se spustí pro každou kombinaci vstupů — například validní email, email bez @, prázdný string — a pytest automaticky pojmenuje každý případ.",
+      },
+    ],
+  },
 };
 
 export default topic;

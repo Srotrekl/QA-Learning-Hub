@@ -12,6 +12,13 @@ export type QuizQuestion = {
   explanation: string;
 };
 
+export type TopicTranslation = {
+  summary: string;
+  explanation: string;
+  whyItMatters: string;
+  quiz: QuizQuestion[];
+};
+
 export type Topic = {
   slug: string;
   title: string;
@@ -23,4 +30,5 @@ export type Topic = {
   codeExamples: CodeExample[];
   quiz: QuizQuestion[];
   relatedRepoUrl?: string;
+  cs?: TopicTranslation;
 };
