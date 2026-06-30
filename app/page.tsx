@@ -13,12 +13,12 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="py-12 sm:py-16">
+      <section className="py-8 sm:py-12">
         <AnimatedHero />
       </section>
 
       {/* Topics grid */}
-      <section id="topics" aria-labelledby="topics-heading">
+      <section id="topics" aria-labelledby="topics-heading" className="mt-8">
         <TopicsSectionHeading count={topics.length} />
         <AnimatedTopicGrid topics={sorted} />
       </section>

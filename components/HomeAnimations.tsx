@@ -54,7 +54,7 @@ export function AnimatedHero() {
           href="https://github.com/Srotrekl"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-md border border-[var(--color-border)] px-4 py-2 font-mono text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/50 hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+          className="rounded-md border border-[var(--color-border)] bg-transparent px-4 py-2 font-mono text-sm text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-border)] hover:text-[var(--color-text-secondary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
         >
           {t.hero.githubCv}
         </a>
@@ -78,7 +78,7 @@ export function TopicsSectionHeading({ count }: { count: number }) {
 export function AnimatedTopicGrid({ topics }: { topics: Topic[] }) {
   return (
     <motion.div
-      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child:nth-child(3n+1)]:sm:col-span-2 [&>*:last-child:nth-child(3n+1)]:lg:col-span-1 [&>*:last-child:nth-child(3n+1)]:lg:col-start-2"
       initial="hidden"
       animate="show"
       variants={{ show: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } } }}
