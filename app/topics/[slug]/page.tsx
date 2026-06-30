@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAllSlugs, getTopicBySlug } from "@/lib/topics";
 import { TopicTabs } from "@/components/TopicTabs";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -43,16 +44,7 @@ export default async function TopicPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl py-4">
-      <div className="mb-2 flex items-center gap-2">
-        <a
-          href="/"
-          className="font-mono text-xs text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
-        >
-          ← topics
-        </a>
-        <span className="text-[var(--color-text-muted)]">/</span>
-        <span className="font-mono text-xs text-[var(--color-text-secondary)]">{topic.slug}</span>
-      </div>
+      <Breadcrumb slug={topic.slug} />
 
       <h1 className="mb-2 text-2xl font-bold text-[var(--color-text-primary)]">{topic.title}</h1>
 

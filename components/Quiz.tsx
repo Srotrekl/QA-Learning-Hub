@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { QuizQuestion } from "@/lib/types";
+import { useT } from "@/lib/i18n";
 
 interface QuizProps {
   questions: QuizQuestion[];
@@ -16,6 +17,7 @@ function ResultScreen({
   total: number;
   onReset: () => void;
 }) {
+  const t = useT();
   const perfect = score === total;
 
   return (
@@ -31,17 +33,17 @@ function ResultScreen({
 
       <p className="text-sm text-[var(--color-text-secondary)]">
         {perfect
-          ? "All correct — nice work."
+          ? t.quiz.allCorrect
           : score === 0
-            ? "No correct answers — give it another go."
-            : `${total - score} to review.`}
+            ? t.quiz.noneCorrect
+            : t.quiz.toReview(total - score)}
       </p>
 
       <button
         onClick={onReset}
         className="rounded-md border border-[var(--color-border)] px-4 py-2 font-mono text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/50 hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       >
-        Try again
+        {t.quiz.tryAgain}
       </button>
     </div>
   );
@@ -50,6 +52,7 @@ function ResultScreen({
 const OPTION_KEYS = ["1", "2", "3", "4"] as const;
 
 export function Quiz({ questions }: QuizProps) {
+  const t = useT();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -112,7 +115,7 @@ export function Quiz({ questions }: QuizProps) {
       {/* Progress + question number */}
       <div className="flex items-center gap-3">
         <span className="font-mono text-xs text-[var(--color-text-muted)]">
-          {currentIndex + 1} / {questions.length}
+          {t.quiz.progress(currentIndex + 1, questions.length)}
         </span>
         <div
           className="h-1 flex-1 overflow-hidden rounded-full bg-[var(--color-border)]"
@@ -189,7 +192,7 @@ export function Quiz({ questions }: QuizProps) {
           }`}
         >
           <span className="font-mono text-xs font-semibold">
-            {selectedIndex === q.correctIndex ? "✓ Correct" : "✗ Incorrect"}
+            {selectedIndex === q.correctIndex ? t.quiz.correct : t.quiz.incorrect}
             {" — "}
           </span>
           {q.explanation}
@@ -204,7 +207,7 @@ export function Quiz({ questions }: QuizProps) {
             onClick={advance}
             className="rounded-md bg-[var(--color-accent)] px-4 py-2 font-mono text-sm font-semibold text-[#0d1117] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           >
-            {isLast ? "See results →" : "Next →"}
+            {isLast ? t.quiz.seeResults : t.quiz.next}
           </button>
         </div>
       )}

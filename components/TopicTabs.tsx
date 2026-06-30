@@ -5,19 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Topic } from "@/lib/types";
 import { Quiz } from "@/components/Quiz";
 import { CodeRunner } from "@/components/CodeRunner";
+import { useT } from "@/lib/i18n";
 
 interface TopicTabsProps {
   topic: Topic;
 }
 
 type TabId = "explanation" | "code" | "try" | "quiz";
-
-const TABS: { id: TabId; label: string }[] = [
-  { id: "explanation", label: "Explanation" },
-  { id: "code", label: "Code" },
-  { id: "try", label: "Try it" },
-  { id: "quiz", label: "Quiz" },
-];
 
 // ─── Markdown renderer (no external dep — handle headings, bold, inline code, lists) ──
 function SimpleMarkdown({ content }: { content: string }) {
@@ -97,6 +91,7 @@ function InlineMarkdown({ text }: { text: string }) {
 // ─── Copy button ───────────────────────────────────────────────────────────────
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
+  const t = useT();
 
   async function copy() {
     await navigator.clipboard.writeText(text);
@@ -110,13 +105,14 @@ function CopyButton({ text }: { text: string }) {
       aria-label="Copy code to clipboard"
       className="font-mono text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
     >
-      {copied ? "✓ copied" : "copy"}
+      {copied ? t.code.copied : t.code.copy}
     </button>
   );
 }
 
 // ─── Tab panels ───────────────────────────────────────────────────────────────
 function ExplanationPanel({ topic }: { topic: Topic }) {
+  const t = useT();
   return (
     <div className="flex flex-col gap-6">
       <SimpleMarkdown content={topic.explanation} />
@@ -124,7 +120,7 @@ function ExplanationPanel({ topic }: { topic: Topic }) {
       {/* Why it matters box */}
       <div className="rounded-md border border-[var(--color-accent)]/30 bg-[var(--color-accent-dim)] p-4">
         <p className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-          Why it matters
+          {t.whyItMatters}
         </p>
         <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
           {topic.whyItMatters}
@@ -138,7 +134,7 @@ function ExplanationPanel({ topic }: { topic: Topic }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-accent)] transition-colors hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
         >
-          View related repo →
+          {t.viewRelatedRepo}
         </a>
       )}
     </div>
@@ -146,9 +142,10 @@ function ExplanationPanel({ topic }: { topic: Topic }) {
 }
 
 function CodePanel({ topic }: { topic: Topic }) {
+  const t = useT();
   if (topic.codeExamples.length === 0) {
     return (
-      <p className="text-sm text-[var(--color-text-muted)]">No code examples for this topic.</p>
+      <p className="text-sm text-[var(--color-text-muted)]">{t.code.noExamples}</p>
     );
   }
 
@@ -180,15 +177,14 @@ function CodePanel({ topic }: { topic: Topic }) {
 }
 
 function TryPanel({ topic }: { topic: Topic }) {
+  const t = useT();
   const runnableExamples = topic.codeExamples.filter(
     (e) => e.runnable || e.language === "ts" || e.language === "python",
   );
 
   if (runnableExamples.length === 0) {
     return (
-      <p className="text-sm text-[var(--color-text-muted)]">
-        No runnable examples for this topic.
-      </p>
+      <p className="text-sm text-[var(--color-text-muted)]">{t.code.noRunnable}</p>
     );
   }
 
@@ -205,8 +201,9 @@ function TryPanel({ topic }: { topic: Topic }) {
 }
 
 function QuizPanel({ topic }: { topic: Topic }) {
+  const t = useT();
   if (topic.quiz.length === 0) {
-    return <p className="text-sm text-[var(--color-text-muted)]">No quiz for this topic yet.</p>;
+    return <p className="text-sm text-[var(--color-text-muted)]">{t.quiz.noQuiz}</p>;
   }
 
   return <Quiz questions={topic.quiz} />;
@@ -216,6 +213,14 @@ function QuizPanel({ topic }: { topic: Topic }) {
 export function TopicTabs({ topic }: TopicTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("explanation");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const t = useT();
+
+  const TABS: { id: TabId; label: string }[] = [
+    { id: "explanation", label: t.tabs.explanation },
+    { id: "code", label: t.tabs.code },
+    { id: "try", label: t.tabs.tryIt },
+    { id: "quiz", label: t.tabs.quiz },
+  ];
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, index: number) => {
@@ -235,7 +240,7 @@ export function TopicTabs({ topic }: TopicTabsProps) {
       tabRefs.current[next]?.focus();
       setActiveTab(TABS[next].id);
     },
-    [],
+    [TABS],
   );
 
   return (
@@ -243,7 +248,7 @@ export function TopicTabs({ topic }: TopicTabsProps) {
       {/* Tab list */}
       <div
         role="tablist"
-        aria-label="Topic sections"
+        aria-label={t.tabs.ariaLabel}
         className="flex gap-0 overflow-x-auto border-b border-[var(--color-border)]"
       >
         {TABS.map((tab, index) => {

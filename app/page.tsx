@@ -1,5 +1,5 @@
 import { getAllTopics } from "@/lib/topics";
-import { AnimatedHero, AnimatedTopicGrid } from "@/components/HomeAnimations";
+import { AnimatedHero, AnimatedTopicGrid, TopicsSectionHeading } from "@/components/HomeAnimations";
 
 export default async function HomePage() {
   const topics = await getAllTopics();
@@ -19,13 +19,7 @@ export default async function HomePage() {
 
       {/* Topics grid */}
       <section id="topics" aria-labelledby="topics-heading">
-        <h2
-          id="topics-heading"
-          className="mb-6 font-mono text-xs font-semibold tracking-widest text-[var(--color-text-muted)] uppercase"
-        >
-          Topics — {topics.length} available
-        </h2>
-
+        <TopicsSectionHeading count={topics.length} />
         <AnimatedTopicGrid topics={sorted} />
       </section>
     </>
