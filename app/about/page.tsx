@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Steve Rotrékl — QA Automation Engineer specializing in Playwright, API testing, CI/CD, and AI/LLM security testing.",
+    "Steve Rotrekl — QA Automation Engineer specializing in Playwright, API testing, CI/CD, and AI/LLM security testing.",
 };
 
 export default function AboutPage() {
@@ -13,7 +13,7 @@ export default function AboutPage() {
 
       <div className="flex flex-col gap-6 text-sm leading-relaxed text-[var(--color-text-secondary)]">
         <p>
-          I&apos;m Steve Rotrékl, a QA Automation Engineer transitioning from automotive QA to
+          I&apos;m Steve Rotrekl, a QA Automation Engineer transitioning from automotive QA to
           software testing. I work with Playwright, pytest, REST API testing, and GitHub Actions
           CI/CD.
         </p>

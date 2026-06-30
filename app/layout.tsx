@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "QA Learning Hub | Steve Rotrékl",
+    default: "QA Learning Hub | Steve RotrĂ©kl",
     template: "%s | QA Learning Hub",
   },
   description:
-    "Interactive QA automation portfolio: Playwright, API testing, CI/CD, and AI/LLM security testing — learn by doing.",
+    "Interactive QA automation portfolio: Playwright, API testing, CI/CD, and AI/LLM security testing â€” learn by doing.",
   openGraph: {
     title: "QA Learning Hub",
     description:
@@ -46,7 +46,7 @@ export default function RootLayout({
               href="/"
               className="font-mono text-sm font-semibold text-[var(--color-text-primary)] transition-colors hover:text-[var(--color-accent)]"
             >
-              <span className="text-[var(--color-accent)]">▶</span> qa-hub
+              <span className="text-[var(--color-accent)]">â–¶</span> qa-hub
             </a>
             <nav className="flex items-center gap-4">
               <a
@@ -73,7 +73,7 @@ export default function RootLayout({
         <footer className="border-t border-[var(--color-border)] py-6">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4">
             <span className="font-mono text-xs text-[var(--color-text-muted)]">
-              Steve Rotrékl · QA Automation Engineer
+              Steve RotrĂ©kl Â· QA Automation Engineer
             </span>
             <span className="flex items-center gap-1.5 font-mono text-xs text-[var(--color-pass)]">
               <span
@@ -88,3 +88,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -1,6 +1,6 @@
-# QA Learning Hub
+﻿# QA Learning Hub
 
-> Interactive QA automation portfolio — learn by doing, not just reading.
+> Interactive QA automation portfolio â€” learn by doing, not just reading.
 
 [![CI](https://github.com/Srotrekl/qa-hub/actions/workflows/ci.yml/badge.svg)](https://github.com/Srotrekl/qa-hub/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -15,7 +15,7 @@ A portfolio web app demonstrating QA automation skills through interactive topic
 | ------------------------------- | ------------ | ---------- |
 | Playwright E2E                  | automation   | medior     |
 | API Testing (pytest + requests) | api          | medior     |
-| AI/LLM Security Testing ⭐      | ai-testing   | senior     |
+| AI/LLM Security Testing â­      | ai-testing   | senior     |
 | pytest Basics                   | fundamentals | junior     |
 | CI/CD (GitHub Actions)          | ci-cd        | medior     |
 
@@ -23,11 +23,11 @@ A portfolio web app demonstrating QA automation skills through interactive topic
 
 - **Next.js 15** (App Router, SSG) + TypeScript
 - **Tailwind CSS v4** + shadcn/ui
-- **Sandpack** — live JS/TS code runner in browser
-- **Pyodide** — live Python code runner in browser
-- **Framer Motion** — subtle animations
-- **Vitest** + React Testing Library — component tests
-- **Playwright** + axe-core — E2E + accessibility
+- **Sandpack** â€” live JS/TS code runner in browser
+- **Pyodide** â€” live Python code runner in browser
+- **Framer Motion** â€” subtle animations
+- **Vitest** + React Testing Library â€” component tests
+- **Playwright** + axe-core â€” E2E + accessibility
 
 ## Quick start
 
@@ -52,9 +52,10 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Adding a new topic
 
 1. Create `content/topics/your-topic.ts` following the `Topic` type in `lib/types.ts`.
-2. No changes to components needed — topics are loaded automatically.
+2. No changes to components needed â€” topics are loaded automatically.
 
 ## Author
 
-Steve Rotrékl — QA Automation Engineer  
-[GitHub](https://github.com/Srotrekl) · [LinkedIn](https://linkedin.com/in/steve-rotrekl)
+Steve RotrĂ©kl â€” QA Automation Engineer  
+[GitHub](https://github.com/Srotrekl) Â· [LinkedIn](https://linkedin.com/in/steve-rotrekl)
+
