@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Topic } from "@/lib/types";
 import { Quiz } from "@/components/Quiz";
 import { CodeRunner } from "@/components/CodeRunner";
@@ -273,25 +274,26 @@ export function TopicTabs({ topic }: TopicTabsProps) {
       </div>
 
       {/* Tab panels */}
-      {TABS.map((tab) => (
-        <div
-          key={tab.id}
-          role="tabpanel"
-          id={`panel-${tab.id}`}
-          aria-labelledby={`tab-${tab.id}`}
-          hidden={activeTab !== tab.id}
-          className="py-6"
-        >
-          {activeTab === tab.id && (
-            <>
-              {tab.id === "explanation" && <ExplanationPanel topic={topic} />}
-              {tab.id === "code" && <CodePanel topic={topic} />}
-              {tab.id === "try" && <TryPanel topic={topic} />}
-              {tab.id === "quiz" && <QuizPanel topic={topic} />}
-            </>
-          )}
-        </div>
-      ))}
+      <AnimatePresence mode="wait">
+        {TABS.filter((tab) => tab.id === activeTab).map((tab) => (
+          <motion.div
+            key={tab.id}
+            role="tabpanel"
+            id={`panel-${tab.id}`}
+            aria-labelledby={`tab-${tab.id}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="py-6"
+          >
+            {tab.id === "explanation" && <ExplanationPanel topic={topic} />}
+            {tab.id === "code" && <CodePanel topic={topic} />}
+            {tab.id === "try" && <TryPanel topic={topic} />}
+            {tab.id === "quiz" && <QuizPanel topic={topic} />}
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

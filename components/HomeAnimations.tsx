@@ -1,0 +1,84 @@
+"use client";
+
+import { motion } from "framer-motion";
+import type { Topic } from "@/lib/types";
+import { TopicCard } from "@/components/TopicCard";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0 },
+};
+
+export function AnimatedHero() {
+  return (
+    <motion.div
+      className="flex flex-col gap-4"
+      initial="hidden"
+      animate="show"
+      variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+    >
+      <motion.div variants={fadeUp} transition={{ duration: 0.4, ease: "easeOut" }}>
+        <span className="font-mono text-xs text-[var(--color-accent)]">✓ available for hire</span>
+      </motion.div>
+
+      <motion.h1
+        variants={fadeUp}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl"
+      >
+        QA Automation Engineer
+      </motion.h1>
+
+      <motion.p
+        variants={fadeUp}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="max-w-xl text-base leading-relaxed text-[var(--color-text-secondary)]"
+      >
+        Playwright · API testing · CI/CD · AI/LLM security — each topic below is interactive:
+        explanation, live code, and a quiz.
+      </motion.p>
+
+      <motion.div
+        variants={fadeUp}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="flex flex-wrap gap-3 pt-2"
+      >
+        <a
+          href="#topics"
+          className="rounded-md bg-[var(--color-accent)] px-4 py-2 font-mono text-sm font-semibold text-[#0d1117] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+        >
+          Browse topics ↓
+        </a>
+        <a
+          href="https://github.com/Srotrekl"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-md border border-[var(--color-border)] px-4 py-2 font-mono text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent)]/50 hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+        >
+          GitHub / CV →
+        </a>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export function AnimatedTopicGrid({ topics }: { topics: Topic[] }) {
+  return (
+    <motion.div
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      initial="hidden"
+      animate="show"
+      variants={{ show: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } } }}
+    >
+      {topics.map((topic) => (
+        <motion.div
+          key={topic.slug}
+          variants={fadeUp}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
+          <TopicCard topic={topic} />
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
