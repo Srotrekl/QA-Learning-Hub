@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* Design tokens — dark mode default (github-dark vibe) */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Background palette */
+  --color-bg-base: #0d1117;
+  --color-bg-surface: #161b22;
+  --color-bg-elevated: #21262d;
+  --color-bg-overlay: #30363d;
+
+  /* Text */
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #848d97;
+
+  /* Accent — electric teal (like "test passed") */
+  --color-accent: #00d4aa;
+  --color-accent-hover: #00b894;
+  --color-accent-dim: rgba(0, 212, 170, 0.15);
+
+  /* Semantic */
+  --color-pass: #3fb950;
+  --color-fail: #f85149;
+  --color-border: #30363d;
+
+  /* Light mode overrides — set via data-theme="light" on html */
+  --color-bg-base-light: #ffffff;
+  --color-bg-surface-light: #f6f8fa;
+  --color-bg-elevated-light: #eaeef2;
+  --color-text-primary-light: #1f2328;
+  --color-text-secondary-light: #656d76;
+  --color-border-light: #d0d7de;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+[data-theme="light"] body {
+  background-color: var(--color-bg-base-light);
+  color: var(--color-text-primary-light);
+}
+
+/* Smooth transitions for theme switch */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.15s ease;
+}
