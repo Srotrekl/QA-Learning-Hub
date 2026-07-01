@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { Topic } from "@/lib/types";
+import { useProgressContext } from "@/lib/ProgressContext";
 
 const categoryColors: Record<Topic["category"], string> = {
   automation: "text-[var(--color-accent)] border-[var(--color-accent)]",
@@ -31,6 +34,8 @@ interface TopicCardProps {
 
 export function TopicCard({ topic }: TopicCardProps) {
   const isAiTopic = topic.category === "ai-testing";
+  const { isCompleted } = useProgressContext();
+  const done = isCompleted(topic.slug);
 
   return (
     <Link
@@ -74,6 +79,14 @@ export function TopicCard({ topic }: TopicCardProps) {
         >
           {topic.difficulty}
         </span>
+        {done && (
+          <span
+            className="ml-auto rounded border border-[var(--color-pass)]/40 bg-[var(--color-pass)]/10 px-1.5 py-0.5 font-mono text-[10px] text-[var(--color-pass)]"
+            aria-label="Completed"
+          >
+            ✓ done
+          </span>
+        )}
       </div>
     </Link>
   );

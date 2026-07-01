@@ -3,9 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import type { QuizQuestion } from "@/lib/types";
 import { useT } from "@/lib/i18n";
+import { useProgressContext } from "@/lib/ProgressContext";
 
 interface QuizProps {
   questions: QuizQuestion[];
+  slug?: string;
 }
 
 function ResultScreen({
@@ -51,8 +53,9 @@ function ResultScreen({
 
 const OPTION_KEYS = ["1", "2", "3", "4"] as const;
 
-export function Quiz({ questions }: QuizProps) {
+export function Quiz({ questions, slug }: QuizProps) {
   const t = useT();
+  const { markCompleted } = useProgressContext();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -78,6 +81,7 @@ export function Quiz({ questions }: QuizProps) {
   }
 
   function advance() {
+    if (isLast && slug) markCompleted(slug);
     setCurrentIndex((i) => i + 1);
     setSelectedIndex(null);
   }

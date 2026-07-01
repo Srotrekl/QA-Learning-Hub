@@ -1,7 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Quiz } from "@/components/Quiz";
+import { ProgressProvider } from "@/lib/ProgressContext";
 import type { QuizQuestion } from "@/lib/types";
+
+function renderQuiz(questions: QuizQuestion[], slug?: string) {
+  return render(
+    <ProgressProvider>
+      <Quiz questions={questions} slug={slug} />
+    </ProgressProvider>,
+  );
+}
 
 const mockQuestions: QuizQuestion[] = [
   {
@@ -19,7 +28,7 @@ const mockQuestions: QuizQuestion[] = [
 ];
 
 function clickOption(label: RegExp | string) {
-  fireEvent.click(screen.getByRole("button", { name: label }));
+  fireEvent.click(screen.getByRole("radio", { name: label }));
 }
 
 function clickNext() {
@@ -36,41 +45,41 @@ function clickTryAgain() {
 
 describe("Quiz", () => {
   it("renders the first question with 4 answer buttons", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     expect(screen.getByText("Q1: Which option is correct?")).toBeInTheDocument();
-    expect(screen.getAllByRole("button").filter((b) => b.textContent?.match(/Correct|Wrong/))).toHaveLength(4);
+    expect(screen.getAllByRole("radio")).toHaveLength(4);
   });
 
   it("shows explanation and marks correct option green on correct answer", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     clickOption(/Correct answer/);
     expect(screen.getByText(/Exp1: Option A is correct\./)).toBeInTheDocument();
     expect(screen.getByText(/✓ Correct/)).toBeInTheDocument();
   });
 
   it("shows explanation and marks wrong option red on incorrect answer", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     clickOption(/Wrong B/);
     expect(screen.getByText(/Exp1: Option A is correct\./)).toBeInTheDocument();
     expect(screen.getByText(/✗ Incorrect/)).toBeInTheDocument();
   });
 
   it("disables all option buttons after answering", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     clickOption(/Wrong C/);
-    const optionButtons = screen.getAllByRole("button", { name: /Correct|Wrong/ });
+    const optionButtons = screen.getAllByRole("radio");
     optionButtons.forEach((btn) => expect(btn).toBeDisabled());
   });
 
   it("advances to next question after clicking Next", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     clickOption(/Correct answer/);
     clickNext();
     expect(screen.getByText("Q2: Pick the right one.")).toBeInTheDocument();
   });
 
   it("shows exactly '2 / 2' when both answers are correct", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     // Q1: correct (index 0)
     clickOption(/Correct answer/);
     clickNext();
@@ -83,7 +92,7 @@ describe("Quiz", () => {
   });
 
   it("shows exactly '1 / 2' when one answer is wrong", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     // Q1: wrong
     clickOption(/Wrong B/);
     clickNext();
@@ -96,7 +105,7 @@ describe("Quiz", () => {
   });
 
   it("resets score on Try again — second attempt counts independently", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
 
     // First attempt: both correct → "2 / 2"
     clickOption(/Correct answer/);
@@ -117,9 +126,9 @@ describe("Quiz", () => {
   });
 
   it("ignores double-click / second selection — score stays at most 1", () => {
-    render(<Quiz questions={mockQuestions} />);
-    const correctBtn = screen.getByRole("button", { name: /Correct answer/ });
-    const wrongBtn = screen.getByRole("button", { name: /Wrong B/ });
+    renderQuiz(mockQuestions);
+    const correctBtn = screen.getByRole("radio", { name: /Correct answer/ });
+    const wrongBtn = screen.getByRole("radio", { name: /Wrong B/ });
 
     // First click selects correct answer
     fireEvent.click(correctBtn);
@@ -137,7 +146,7 @@ describe("Quiz", () => {
   });
 
   it("shows keyboard hint numbers (1–4) on option buttons", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     expect(screen.getByText("1")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
@@ -145,7 +154,7 @@ describe("Quiz", () => {
   });
 
   it("shows progress as '1 / 2' on first question", () => {
-    render(<Quiz questions={mockQuestions} />);
+    renderQuiz(mockQuestions);
     expect(screen.getByText("1 / 2")).toBeInTheDocument();
   });
 });

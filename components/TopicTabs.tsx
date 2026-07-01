@@ -214,7 +214,7 @@ function QuizPanel({ topic }: { topic: Topic }) {
     return <p className="text-sm text-[var(--color-text-muted)]">{t.quiz.noQuiz}</p>;
   }
 
-  return <Quiz questions={questions} />;
+  return <Quiz questions={questions} slug={topic.slug} />;
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
