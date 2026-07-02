@@ -52,6 +52,7 @@ function ResultScreen({
 }
 
 const OPTION_KEYS = ["1", "2", "3", "4"] as const;
+const PASS_THRESHOLD = 0.6;
 
 export function Quiz({ questions, slug }: QuizProps) {
   const t = useT();
@@ -81,7 +82,9 @@ export function Quiz({ questions, slug }: QuizProps) {
   }
 
   function advance() {
-    if (isLast && slug) markCompleted(slug);
+    if (isLast && slug && score / questions.length >= PASS_THRESHOLD) {
+      markCompleted(slug);
+    }
     setCurrentIndex((i) => i + 1);
     setSelectedIndex(null);
   }

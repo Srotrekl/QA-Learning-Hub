@@ -1,8 +1,9 @@
 "use client";
 
 import { useProgressContext } from "@/lib/ProgressContext";
+import { getAllSlugs } from "@/lib/topics";
 
-const TOTAL_TOPICS = 5;
+const TOTAL_TOPICS = getAllSlugs().length;
 
 export function GlobalProgressBar() {
   const { completed } = useProgressContext();
